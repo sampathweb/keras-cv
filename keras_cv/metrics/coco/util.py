@@ -11,16 +11,14 @@ def sort_bboxes(boxes, axis=5):
     part of computing both COCORecall and COCOMeanAveragePrecision.
 
     Args:
-        boxes: Tensor of bounding boxes in format `[images, bboxes, 6]`
-        axis: Integer identifying the axis on which to sort, default 5
+      boxes: Tensor of bounding boxes in format `[images, bboxes, 6]`
+      axis: Integer identifying the axis on which to sort, default 5
 
     Returns:
-        boxes: A new Tensor of Bounding boxes, sorted on an image-wise basis.
+      boxes: A new Tensor of Bounding boxes, sorted on an image-wise basis.
     """
     num_images = tf.shape(boxes)[0]
-    boxes_sorted_list = tf.TensorArray(
-        tf.float32, size=num_images, dynamic_size=False
-    )
+    boxes_sorted_list = tf.TensorArray(tf.float32, size=num_images, dynamic_size=False)
     for img in tf.range(num_images):
         preds_for_img = boxes[img, :, :]
         prediction_scores = preds_for_img[:, axis]
@@ -29,3 +27,14 @@ def sort_bboxes(boxes, axis=5):
             img, tf.gather(preds_for_img, idx, axis=0)
         )
     return boxes_sorted_list.stack()
+
+
+def filter_by_class(bboxes, class_id):
+    """Filters bboxes to only include those matching class_id.
+    Args:
+      bboxes: tf.Tensor of shape `[boxes, 6]`.
+      class_id: integer representing the class to filter on.
+    Returns:
+      bboxes: bboxes filtered to only contain samples where `[4]==class_id`
+    """
+    return tf.gather_nd(bboxes, tf.where(bboxes[:, 4] == class_id))

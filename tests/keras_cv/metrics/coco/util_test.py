@@ -29,7 +29,15 @@ class UtilTest(tf.test.TestCase):
         y_sorted = util.sort_bboxes(y_pred)
         self.assertAllClose(y_pred, y_sorted)
 
+    def test_filter_bboxes(self):
+        y_pred = tf.stack(
+            [_dummy_box(class_id=1), _dummy_box(class_id=2), _dummy_box(class_id=1)]
+        )
+        want = tf.stack([_dummy_box(class_id=1), _dummy_box(class_id=1)])
+        y_sorted = util.filter_by_class(y_pred, 1)
+        self.assertAllClose(y_sorted, want)
 
-def _dummy_bbox(confidence):
+
+def _dummy_bbox(confidence=0, class_id=0):
     """returns a bbox dummy with all 0 values, except for confidence."""
-    return tf.constant([0, 0, 0, 0, 0, confidence])
+    return tf.constant([0, 0, 0, 0, class_id, confidence])

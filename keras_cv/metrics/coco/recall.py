@@ -18,6 +18,7 @@ class COCORecall(tf.keras.metrics.Metric):
         value is the range [0.5:0.95,0.05].
       categories: list of categories, or number of categories to use.
     """
+
     def __init__(self, iou_thresholds=None, categories=None, **kwargs):
         super(COCORecall, self).__init__(**kwargs)
         iou_thresholds = iou_thresholds or [x / 100.0 for x in range(50, 100, 5)]
