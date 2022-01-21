@@ -54,6 +54,7 @@ jobs:
     - name: Install dependencies
       run: |
         pip install tensorflow
+        pip install pytest
         pip install -e ".[tests]" --progress-bar off --upgrade
     - name: Lint
       run: bash shell/lint.sh
