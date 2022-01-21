@@ -33,7 +33,10 @@ class UtilTest(tf.test.TestCase):
         boxes = [box_set1, box_set2]
         bbox_tensor = util.to_sentinel_padded_bbox_tensor(boxes)
         self.assertAllClose(
-            bbox_tensor[1, 1], -tf.ones(6,),
+            bbox_tensor[1, 1],
+            -tf.ones(
+                6,
+            ),
         )
 
     def test_filter_out_sentinels(self):
@@ -55,13 +58,23 @@ class UtilTest(tf.test.TestCase):
     def test_sort_bboxes_unsorted_list(self):
         y_pred = tf.expand_dims(
             tf.stack(
-                [_dummy_bbox(0.1), _dummy_bbox(0.9), _dummy_bbox(0.4), _dummy_bbox(0.2)]
+                [
+                    _dummy_bbox(0.1),
+                    _dummy_bbox(0.9),
+                    _dummy_bbox(0.4),
+                    _dummy_bbox(0.2),
+                ]
             ),
             axis=0,
         )
         want = tf.expand_dims(
             tf.stack(
-                [_dummy_bbox(0.9), _dummy_bbox(0.4), _dummy_bbox(0.2), _dummy_bbox(0.1)]
+                [
+                    _dummy_bbox(0.9),
+                    _dummy_bbox(0.4),
+                    _dummy_bbox(0.2),
+                    _dummy_bbox(0.1),
+                ]
             ),
             axis=0,
         )

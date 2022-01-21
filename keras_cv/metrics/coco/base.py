@@ -1,9 +1,10 @@
 import tensorflow as tf
 import tensorflow.keras as keras
 import tensorflow.keras.initializers as initializers
-from keras_cv.util import bbox
+
 from keras_cv.metrics.coco import iou as iou_lib
 from keras_cv.metrics.coco import util
+from keras_cv.util import bbox
 
 
 class COCOBase(keras.metrics.Metric):
@@ -95,7 +96,7 @@ class COCOBase(keras.metrics.Metric):
         true_positives_update = tf.zeros_like(self.true_positives)
         false_positives_update = tf.zeros_like(self.false_positives)
         ground_truth_boxes_update = tf.zeros_like(self.ground_truth_boxes)
-        
+
         for img in tf.range(num_images):
             sentinel_filtered_y_true = util.filter_out_sentinels(y_true[img])
             sentinel_filtered_y_pred = util.filter_out_sentinels(y_pred[img])
@@ -136,7 +137,9 @@ class COCOBase(keras.metrics.Metric):
                     false_positives = tf.cast(pred_matches == -1, tf.float32)
 
                     true_positives_sum = tf.math.reduce_sum(true_positives, axis=-1)
-                    false_positives_sum = tf.math.reduce_sum(false_positives, axis=-1)
+                    false_positives_sum = tf.math.reduce_sum(
+                        false_positives, axis=-1
+                    )
 
                     true_positives_update = tf.tensor_scatter_nd_add(
                         true_positives_update, [indices], [true_positives_sum]
@@ -187,7 +190,7 @@ class COCOBase(keras.metrics.Metric):
             gt_matches = gt_matches.write(i, -1)
         for i in tf.range(num_pred):
             pred_matches = pred_matches.write(i, -1)
-        
+
         for detection_idx in tf.range(num_pred):
             match_index = -1
             iou = tf.math.minimum(threshold, 1 - 1e-10)

@@ -9,13 +9,17 @@ from keras_cv.metrics.coco.recall import COCORecall
 class COCORecallTest(tf.test.TestCase):
     def test_recall_area_range_filtering(self):
         recall = COCORecall(
-            max_detections=100, category_ids=[1], area_range=(32 ** 2, 64 ** 2),
+            max_detections=100,
+            category_ids=[1],
+            area_range=(32 ** 2, 64 ** 2),
         )
         t = recall.iou_thresholds.shape[0]
         k = recall.category_ids.shape[0]
 
         # These would match if they were in the area range
-        y_true = np.array([[[0, 0, 10, 10, 1], [5, 5, 10, 10, 1]]]).astype(np.float32)
+        y_true = np.array([[[0, 0, 10, 10, 1], [5, 5, 10, 10, 1]]]).astype(
+            np.float32
+        )
         y_pred = np.array([[[0, 0, 10, 10, 1, 1.0], [5, 5, 10, 10, 1, 0.9]]]).astype(
             np.float32
         )
@@ -62,7 +66,13 @@ class COCORecallTest(tf.test.TestCase):
             max_detections=1, category_ids=[1], area_range=(0, 1e9 ** 2)
         )
         y_true = np.array(
-            [[[0, 0, 100, 100, 1], [100, 100, 200, 200, 1], [300, 300, 400, 400, 1],]]
+            [
+                [
+                    [0, 0, 100, 100, 1],
+                    [100, 100, 200, 200, 1],
+                    [300, 300, 400, 400, 1],
+                ]
+            ]
         ).astype(np.float32)
         y_pred = np.concatenate([y_true, np.ones((1, 3, 1))], axis=-1).astype(
             np.float32
@@ -77,7 +87,13 @@ class COCORecallTest(tf.test.TestCase):
             max_detections=3, category_ids=[1], area_range=(0, 1e9 ** 2)
         )
         y_true = np.array(
-            [[[0, 0, 100, 100, 1], [100, 100, 200, 200, 1], [300, 300, 400, 400, 1],]]
+            [
+                [
+                    [0, 0, 100, 100, 1],
+                    [100, 100, 200, 200, 1],
+                    [300, 300, 400, 400, 1],
+                ]
+            ]
         ).astype(np.float32)
         y_pred = np.concatenate([y_true, np.ones((1, 3, 1))], axis=-1).astype(
             np.float32
